@@ -1,0 +1,31 @@
+{
+  "scripts": {
+    "dev": "ts-node src/app.ts -b 7 -s",
+    "dev:nodemon": "nodemon -b 7",
+    "build": "rimraf ./dist && tsc",
+    "start": "npm run build && node dist/app.js",
+    "test": "node --experimental-vm-modules node_modules/jest/bin/jest.js",
+    "test:watch": "node --experimental-vm-modules node_modules/jest/bin/jest.js --watch",
+    "test:coverage": "node --experimental-vm-modules node_modules/jest/bin/jest.js --coverage"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "@types/fs-extra": "^11.0.4",
+    "@types/jest": "^30.0.0",
+    "@types/node": "^24.10.1",
+    "@types/yargs": "^17.0.35",
+    "jest": "^30.2.0",
+    "nodemon": "^3.1.11",
+    "rimraf": "^6.1.0",
+    "supertest": "^7.1.4",
+    "ts-jest": "^29.4.5",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.9.3"
+  },
+  "dependencies": {
+    "fs-extra": "^11.3.2",
+    "yargs": "^17.7.2"
+  }
+}

@@ -1,0 +1,1 @@
+{"version":3,"file":"05-factory.d.ts","sourceRoot":"","sources":["../../src/js-foundation/05-factory.ts"],"names":[],"mappings":"AAEA,UAAU,qBAAqB;IAC3B,MAAM,EAAE,CAAC,SAAS,EAAE,MAAM,KAAK,MAAM,CAAC;IACtC,KAAK,EAAE,MAAM,MAAM,CAAC;CACvB;AAED,UAAU,aAAa;IACnB,IAAI,EAAE,MAAM,CAAC;IACb,SAAS,EAAE,MAAM,CAAC;CACrB;AAED,eAAO,MAAM,eAAe,GAAI,mBAAmB,qBAAqB,MAC5D,qBAAqB,aAAa;;;;;CAQ7C,CAAA"}
