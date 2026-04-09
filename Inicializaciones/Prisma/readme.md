@@ -142,3 +142,5 @@ export { prisma }
 
 # NOTAS
 - Para solucionar el problema de importacion en archivo `lib/prisma.ts` se debe cambiar el outputh en el `schema.prisma` y colocar ```ts output   = "../src/generated" ``` esto ocurre porque TypeScript usa la propiedad rootDir para determinar la estructura de la carpeta de salida (dist). Si intentas importar un archivo que está "más arriba" o fuera de esa carpeta, TypeScript se confunde porque no sabe cómo replicar esa jerarquía en la carpeta final de compilación.
+
+> Preferencia para no tener este problema, borrar el outputh path del schema
