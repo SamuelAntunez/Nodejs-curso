@@ -1,0 +1,37 @@
+{
+  "compilerOptions": {
+    /* --- Configuración del Entorno (Node.js 20/22+) --- */
+    "target": "ES2023", // Genera JS moderno y eficiente
+    "module": "NodeNext", // El estándar para ESM nativo en Node
+    "moduleResolution": "NodeNext", // Obligatorio para NodeNext
+    "lib": [
+      "ES2023"
+    ], // Diccionario de funciones de JS moderno
+    "types": [
+      "node"
+    ], // Tipos globales de Node (process, env, etc.)
+    "rootDir": "src",
+    "outDir": "dist",
+    /* --- Compatibilidad con ORMs (Prisma/TypeORM) --- */
+    "emitDecoratorMetadata": true, // Requerido por TypeORM y decoradores
+    "experimentalDecorators": true, // Requerido por TypeORM
+    "sourceMap": true, // Vital para debugging y rastreo de errores
+    "esModuleInterop": true, // Permite importar paquetes CommonJS sin problemas
+    "resolveJsonModule": true, // Permite importar archivos .json (común en configs)
+    "skipLibCheck": true, // Ignora errores en tipos de librerías externas
+    "forceConsistentCasingInFileNames": true,
+    /* --- Ultra-Estrictez (Calidad de Producción) --- */
+    "strict": true, // Activa el modo estricto completo
+    "noUncheckedIndexedAccess": true, // Seguridad total en arrays (ideal para DB)
+    "exactOptionalPropertyTypes": true, // Evita confusiones entre 'undefined' y 'ausente'
+    "noFallthroughCasesInSwitch": true, // Evita bugs en bloques switch
+  },
+  "include": [
+    "src/**/*"
+  ],
+  "exclude": [
+    "node_modules",
+    "dist",
+    "**/*.spec.ts"
+  ]
+}

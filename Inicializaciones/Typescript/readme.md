@@ -7,7 +7,7 @@ npm i -D typescript @types/node tsx rimraf
 ```
 2. Inicializar el archivo de configuración de TypeScript ( Se puede configurar al gusto)
 ```
-npx tsc --init --outDir dist/ --rootDir src --module ESNext --moduleResolution Bundler --target ES2022
+npx tsc --init --outDir dist/ --rootDir src --module ESNext --moduleResolution Bundler --target ES2023 
 
 ```
 
@@ -29,56 +29,33 @@ npx tsc --init --outDir dist/ --rootDir src --module ESNext --moduleResolution B
 5. Configuracion para ESM con prisma
 ```json
 {
-  // Visit https://aka.ms/tsconfig to read more about this file
   "compilerOptions": {
-    // File Layout
+    /* --- Configuración del Entorno (Node.js 20/22+) --- */
+    "target": "ES2023",                   // Genera JS moderno y eficiente
+    "module": "NodeNext",                 // El estándar para ESM nativo en Node
+    "moduleResolution": "NodeNext",       // Obligatorio para NodeNext
+    "lib": ["ES2023"],                    // Diccionario de funciones de JS moderno
+    "types": ["node"],                    // Tipos globales de Node (process, env, etc.)
     "rootDir": "src",
-    "outDir": "dist/",
-    // Environment Settings
-    // See also https://aka.ms/tsconfig/module
-    "module": "nodenext",
-    "target": "es2023",
-    // "types": [],
-    // For nodejs:
-    "lib": [
-      "esnext"
-    ],
-    "types": [
-      "node"
-    ],
-    // and npm install -D @types/node
-    // Other Outputs
-    "sourceMap": true,
-    "declaration": true,
-    "declarationMap": true,
-    // Stricter Typechecking Options
-    "noUncheckedIndexedAccess": true,
-    "exactOptionalPropertyTypes": true,
-    // Style Options
-    // "noImplicitReturns": true,
-    // "noImplicitOverride": true,
-    // "noUnusedLocals": true,
-    // "noUnusedParameters": true,
-    // "noFallthroughCasesInSwitch": true,
-    // "noPropertyAccessFromIndexSignature": true,
-    // Recommended Options
-    "strict": true,
-    "jsx": "react-jsx",
-    // "verbatimModuleSyntax": true,
-    "isolatedModules": true,
-    "noUncheckedSideEffectImports": true,
-    "moduleDetection": "force",
-    "skipLibCheck": true,
-    "moduleResolution": "nodenext",
+    "outDir": "dist",
+
+    /* --- Compatibilidad con ORMs (Prisma/TypeORM) --- */
+    "emitDecoratorMetadata": true,        // Requerido por TypeORM y decoradores
+    "experimentalDecorators": true,       // Requerido por TypeORM
+    "sourceMap": true,                    // Vital para debugging y rastreo de errores
+    "esModuleInterop": true,              // Permite importar paquetes CommonJS sin problemas
+    "resolveJsonModule": true,            // Permite importar archivos .json (común en configs)
+    "skipLibCheck": true,                 // Ignora errores en tipos de librerías externas
+    "forceConsistentCasingInFileNames": true,
+
+    /* --- Ultra-Estrictez (Calidad de Producción) --- */
+    "strict": true,                       // Activa el modo estricto completo
+    "noUncheckedIndexedAccess": true,     // Seguridad total en arrays (ideal para DB)
+    "exactOptionalPropertyTypes": true,   // Evita confusiones entre 'undefined' y 'ausente'
+    "noFallthroughCasesInSwitch": true,   // Evita bugs en bloques switch
   },
-  "exclude": [
-    "node_modules",
-    "dist",
-    "src/**/*.test.ts"
-  ],
-  "include": [
-    "src/**/*"
-  ],
+  "include": ["src/**/*"],
+  "exclude": ["node_modules", "dist", "**/*.spec.ts"]
 }
 ```
 

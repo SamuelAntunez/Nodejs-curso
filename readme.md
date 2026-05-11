@@ -1,123 +1,123 @@
-# Node Curso
+# 🚀 Guía Definitiva de Node.js y Desarrollo Backend
 
-## Que es Node
-**Node.js** Es un entorno de ejecución de JavaScript de código abierto y multiplataforma, diseñado para construir aplicaciones web y de red del lado del servidor (desligado del navegador web).
+Esta es una guía completa y estructurada de Node.js, abarcando desde los fundamentos hasta arquitecturas avanzadas, despliegues y pruebas. Está diseñada para llevar proyectos desde su concepción hasta producción siguiendo las mejores prácticas de la industria.
+
+---
+
+## 📑 Índice
+1. [Introducción a Node.js y Conceptos Básicos](#1-introducción-a-nodejs-y-conceptos-básicos)
+2. [Configuración de TypeScript en Node.js](#2-configuración-de-typescript-en-nodejs)
+3. [Fundamentos y Estructura de un Proyecto](#3-fundamentos-y-estructura-de-un-proyecto)
+4. [Bases de Datos y ORMs](#4-bases-de-datos-y-orms)
+5. [Creación de Servidores y APIs REST](#5-creación-de-servidores-y-apis-rest)
+6. [Clean Architecture y Domain-Driven Design (DDD)](#6-clean-architecture-y-domain-driven-design-ddd)
+7. [Monitoreo, Cron y Tareas de Background (NOC)](#7-monitoreo-cron-y-tareas-de-background-noc)
+8. [Testing](#8-testing)
+9. [Docker y Despliegue](#9-docker-y-despliegue)
+10. [Paquetes de Terceros Útiles](#10-paquetes-de-terceros-útiles)
+
+---
+
+## 1. Introducción a Node.js y Conceptos Básicos
+
+**Node.js** es un entorno de ejecución de JavaScript de código abierto y multiplataforma, diseñado para construir aplicaciones web y de red del lado del servidor (desligado del navegador web).
+
 ### Non-Blocking I/O
-Casi ninguna funcion en Node bloquea la lectura, por lo que podemos tener cientos de peticiones sin bloquear el servidor gracias a una libreria llamada **libuv**
+Casi ninguna función en Node bloquea la lectura, por lo que podemos manejar cientos de peticiones simultáneas sin bloquear el servidor gracias a una librería en C llamada **libuv**.
 
-### **NPM** Node Package Manager
-Es el gestor de paquetes con mayor crecimiento y paquetes desplegados, la mayoría basados en **node**
+### Herramientas Core
+* **NPM (Node Package Manager):** El gestor de paquetes por excelencia.
+* **NVM (Node Version Manager):** ([NVM Windows](https://github.com/coreybutler/nvm-windows)) Sirve para gestionar múltiples versiones de Node.js en un mismo equipo.
 
-### Node Version Manager - [NVM Windows](https://github.com/coreybutler/nvm-windows)
-Sirve para gestionar multiples versiones de Node.js en un mismo equipo 
-## Clean Architecture
+> 💡 **Pro-Tip Profesional:** Siempre utiliza `nvm` en tus entornos de desarrollo. Nunca instales Node.js directamente desde el instalador web. Esto evitará conflictos de versiones entre proyectos antiguos y nuevos (ej: Node 14 vs Node 20). 
 
-![Clean Architecture](https://cdn-media-1.freecodecamp.org/images/YsN6twE3-4Q4OYpgxoModmx29I8zthQ3f0OR)
+### JavaScript Moderno
+* **Callbacks:** Funciones que se pasan como argumento a otras funciones para ser ejecutadas posteriormente. *(Hoy en día, se prefiere usar promesas para evitar el "Callback Hell").*
+* **Promises & Fetch:** Manejo de asincronía moderno.
+* **Async - Await:** Azúcar sintáctico sobre promesas. Son funciones que implícitamente regresan una promesa y permiten escribir código asíncrono de forma secuencial.
 
-* Las entidades no hablan con los casos de usos, ni los casos de usos con los controllers, ni los controladores con external interfaces
-
-### Clean Architecture para NOC - TASK
-* LogEntity: nivel de severidad, mensaje del suceso, cuando paso
-* Use Cases: Grabar Logs, Leer Logs, Enviar Email, etc
-* Presenters: Aplicacion de Consola
-* DataBase: FileSystem, MongoDB, etc
-
-## Javascript
-### String Methods
-
-* **`String.split('')`:** Separa los strings en substring mediante el separador indicado (en este caso '')
-* **`String.match('string')`:** Se usa para buscar coincidencias dentro de una cadena usando expresiones regulares
-### Callbacks
-
-Son funciones que tienen como argumento otras funciones 
-```js
-function getUserById( id, callback ) {
-    const user = users.find( user => user.id === id)
-    if( !user ) callback(`USUARIO ${id} NO EXISTE`)
-    return callback(null, user)
-}
-
-getUserById(id, function(err, user){
-    if(err) {
-        throw new Error('User not found')
-    }
-    console.log(user)
-})
-```
-Donde los argumentos de la funcion principal posee un **callback** que es se utiliza al momento en el que se ejecuta la funcion como argumento `function(err, user)`, donde el primer argumento es el error y el segundo es el respectivo que se esta buscando
-
-### Promises
-
-Promesa con peticion fetch
-
-```js
-const getPokemonById = ( id) =>{
+```javascript
+const getPokemonById = async(id) => {
     const url = `https://pokeapi.co/api/v2/pokemon/${id}`
-    return fetch(url)
-            .then( (res ) => res.json())
-            .then( (pokemon) => pokemon.name)
-}
-```
-Resolucion de promesa
-```js
-getPokemonById(4)
-    .then((pokemon) =>{
-        console.log(pokemon)
-})
-```
-
-### Async - Await
-
-Son funciones que implicitamente regresan una promesa
-```js
-const getPokemonById = async( id) =>{
-
-    const url = `https://pokeapi.co/api/v2/pokemon/${id}`
-
     const resp = await fetch(url);
     const pokemon = await resp.json();
-
     return pokemon.name
 }
-```
-> Al momento de llamar la promesa, se llama de igual manera
 
-```js
+// Llamada:
 getPokemonById(4)
-    .then((pokemon) => console.log(pokemon))
-    .catch( (err) => console.log(`${err}, Porfavor intente de nuevo`))
-``` 
+    .then(console.log)
+    .catch(err => console.log(`${err}, Por favor intente de nuevo`))
+```
 
-**`assync`:** Convierte la funcion en promesa
-**`await`:** Es un codigo bloqueante que espera a que se resuelva la peticion
+---
 
-## Typescript
+## 2. Configuración de TypeScript en Node.js
 
-### Pasos para usar Node con TypeScript con Nodemon
+Node.js está adoptando TypeScript masivamente. Aquí se presentan diferentes estrategias de configuración dependiendo del caso de uso.
 
 Más información - [Docs Oficiales](https://nodejs.org/en/learn/getting-started/nodejs-with-typescript)
 
-1. Instalar TypeScript y tipos de Node, como dependencia de desarrollo
-```
-npm i -D typescript @types/node
-```
-2. Inicializar el archivo de configuración de TypeScript ( Se puede configurar al gusto)
-```
-npx tsc --init --outDir dist/ --rootDir src
+### Opción A: TSX (Recomendado para ESM y Proyectos Modernos)
+
+Esta es la forma más actual y recomendada, especialmente si usas módulos modernos (ESM) y ORMs como Prisma.
+
+1. **Instalación:**
+```bash
+npm i -D typescript @types/node tsx rimraf
 ```
 
-3. **Opcional** - Para traspilar el código, se puede usar este comando
-```
-npx tsc
-npx tsc --watch
+2. **Inicializar TypeScript:**
+```bash
+npx tsc --init --outDir dist/ --rootDir src --module ESNext --moduleResolution Bundler --target ES2023 
 ```
 
-4. Configurar Nodemon y Node-TS
+3. **Scripts (`package.json`):**
+```json
+"scripts": {
+  "dev": "tsx watch src/app.ts",
+  "build": "rimraf ./dist && tsc",
+  "start": "node dist/app.js"
+}
 ```
-npm install -D ts-node nodemon
+
+4. **Configuración robusta `tsconfig.json` (ESM y Prisma Support):**
+```json
+{
+  "compilerOptions": {
+    "target": "ES2023",
+    "module": "NodeNext",
+    "moduleResolution": "NodeNext",
+    "lib": ["ES2023"],
+    "types": ["node"],
+    "rootDir": "src",
+    "outDir": "dist",
+    "emitDecoratorMetadata": true,
+    "experimentalDecorators": true,
+    "sourceMap": true,
+    "esModuleInterop": true,
+    "resolveJsonModule": true,
+    "skipLibCheck": true,
+    "forceConsistentCasingInFileNames": true,
+    "strict": true,
+    "noUncheckedIndexedAccess": true,
+    "exactOptionalPropertyTypes": true,
+    "noImplicitReturns": true,
+    "noFallthroughCasesInSwitch": true
+  },
+  "include": ["src/**/*"],
+  "exclude": ["node_modules", "dist", "**/*.spec.ts"]
+}
 ```
-5. Crear archivo de configuración de Nodemon - **nodemon.json**
+
+### Opción B: Nodemon + ts-node (Tradicional)
+
+1. **Instalación:**
+```bash
+npm i -D typescript @types/node ts-node nodemon rimraf
 ```
+2. **Configuración Nodemon (`nodemon.json`):**
+```json
 {
   "watch": ["src"],
   "ext": ".ts,.js",
@@ -125,588 +125,349 @@ npm install -D ts-node nodemon
   "exec": "npx ts-node ./src/app.ts"
 }
 ```
-6. Crear script para correr en desarrollo en el **package.json**
-```
-  "dev": "nodemon"
-  "dev": "npx nodemon" // En caso de no querer instalar nodemon
-```
 
-7. Instalar rimraf (Herramienta que funciona similar al rm -f) eliminar directorio
-```
-npm install -D rimraf
-```
+> 💡 **Pro-Tip Profesional:** Para proyectos nuevos usa `tsx`. Es dramáticamente más rápido que `ts-node` y tiene mejor soporte integrado para CommonJS y ESM. Asegúrate siempre de configurar tu `tsconfig.json` con `"strict": true` para maximizar la seguridad que TypeScript provee.
 
-8. Crear scripts en el package.json para construir e iniciar en producción
-```
-   "build": "rimraf ./dist && tsc",
-   "start": "npm run build && node dist/app.js"
-```
-## Bases de Node
+---
+
+## 3. Fundamentos y Estructura de un Proyecto
 
 ### Inicio de Proyecto en Node
-* **`npm init`** en la consola para iniciar un proyecto en node, nos creara el archivo `package.json` donde colocaremos el nombre, version, descripcion, entry point (index.js por defecto), test command, git repository. 
-> Con `npm init -y` se crea todo el archivo por defecto sin necesidad de especificar los datos anteriormente mencionados
+* **`npm init -y`**: Crea rápidamente el `package.json` con configuración por defecto.
 
-### Estructura de un Proyecto
-* **Carpeta `src`:** Esta carpeta es donde se creara el codigo, el lugar donde la aplicacion va a vivir (Se crea en el mismo nivel que el `package.json`)
-* **Carpeta `plugins`:** Esta carpeta
-* **Carpeta `data`:**
-* **Carpeta `presentation`:** Esta es la carpeta que va a estar de cara a cualquiera que este consumiendo nuestra aplicacion
-* **Carpeta `data`:**
-* **Carpeta `services`:**
-    * **Patron adaptador:** Se utiliza como una capa o proteccion para crear un codigo propio que adapta las dependencias de tercero para que nuestro codigo no dependa de las mismas
-    ```js
+### Scripts Útiles
+Se recomienda automatizar el flujo de trabajo:
+* `"dev"`: Para desarrollo continuo (usando `tsx` o `nodemon`).
+* `"build"`: Para transpilar el código TypeScript a JavaScript (`tsc`).
+* `"start"`: Para producción, ejecutando el código transpilado.
 
-> Un caso de uso no es mas que una funcion que se encarga de resolver una tarea
-    const getAgePlugin = require('get-age')
+### Variables de Entorno (`process.env`)
+Se accede a las variables a través de `process.env`. Es vital no quemar (hardcodear) credenciales en el código.
+```javascript
+const { SHELL, PORT } = process.env;
+```
 
-    const getAge = (birthdate) => {
-        if (!birthdate) return new Error(`birthdate is required`)
-        return getAgePlugin(birthdate)
-    }
+### Estructura Recomendada
+* **`/src`**: Código fuente principal.
+* **`/config` o `/plugins`**: Configuración de dependencias de terceros (Patrón Adaptador).
+* **`/presentation`**: Rutas, Controladores, Servidor web.
+* **`/domain`**: Reglas de negocio puras (Entidades, Casos de uso).
+* **`/infrastructure` o `/data`**: Conexiones a bases de datos, APIs externas.
 
-    module.exports = {
-        getAge,
-    }
+### Patrón Adaptador (¡Importante!)
+Se utiliza como una capa de protección para crear un código propio que adapte las dependencias de terceros. De esta manera, tu lógica principal no depende directamente de una librería (ej: fetch, axios, o generadores de UUID).
 
-    ```
-* **Archivo de Barril `index`:** Sirve para cuando se tienen varias exportaciones, para importarlas todo desde un mismo archivo
-
-### Patron Adaptador - FetchAPI
-
-```js
+```javascript
+// En /plugins/http-client.plugin.js
 const httpClientPlugin = {
-    get: async(url) =>{
+    get: async(url) => {
         const resp = await fetch(url);
         return await resp.json();
-    },
-    post: async(url, body) =>{},
-    put: async(url, body) =>{},
-    delete: async(url) =>{},
+    }
 };
-module.exports = {
-    http: httpClientPlugin,
-}
-```
-```js
-const { http } = require('../plugins/index')
+module.exports = { http: httpClientPlugin };
 
-const getPokemonById = async( id) =>{
-    const url = `https://pokeapi.co/api/v2/pokemon/${id}`
-    const pokemon = await http.get(url)
-    return pokemon.name
-}
+// Uso:
+const { http } = require('../plugins');
+const pokemon = await http.get(url);
 ```
 
+> 💡 **Pro-Tip Profesional:** ¡Nunca uses `require` de un paquete de terceros directamente en tus casos de uso o controladores! Si mañana la librería `axios` se vuelve obsoleta o cambia su API, tendrías que cambiar 50 archivos. Si usas el patrón adaptador, solo cambias 1 archivo en la carpeta `/plugins`.
 
-### Scripts en Node
-Se pueden crear **scripts** en node de tal manera que nos puedan ayudar a hacer el trabajo mas facil
-* **`"start": "node src/app.js"`**: Nos ayuda a ejecutar el archivo app.js con el comando `npm run start`
+---
 
-> Los scripts se encontraran en la seccion de `package.json`
+## 4. Bases de Datos y ORMs
 
-### Importaciones y Exportaciones
-* **`require('')`:** Nos ejecuta el archivo donde lo estamos importando
-* **`module.exports = { Object }`:** Forma tradicional de exportar si queremos utilizar un objeto, funcion de otro archivo, al usar esto el `require()` nos retornara lo que estamos exportando
+### MongoDB (Mongoose)
+Para iniciar MongoDB en Docker, revisa la sección de Docker. 
 
-### Nodemon
-Es una herramienta que nos permite que cada vez que se detecte un cambio se actualice la aplicacion
-* Para instalarlo de manera global se usa el comando `npm install -g nodemon`
-* `npm install --save-dev nodemon` para instalarlo como desarrollador o el shortcut `npm install -D nodemon`
+**Instalación:** `npm install mongoose`
 
-Una manera de utilizarlo es crear un script de tal manera que `"dev": "nodemon src/app.js"` y poder utilizar el `npm run dev`
+Un Schema es la plantilla, y un Model es el "constructor" para manipular registros.
+```typescript
+import mongoose from 'mongoose';
 
-### Variables de Entorno
-
-
-* ***`process`:** Son los procesos de node que esta corriendo
-* **`process.env`:** Se muestran las variables de entorno que se ejecutan en node
-
-```js 
-const { SHELL, HOMEBREW_PREFIX } = process.env
-```
-> Utilizar la desestructuracion para conseguir las variables de entorno del `process`
-
-
-### Hello World en Node
-
-Al colocar en cualquier terminal `node` nos abre la terminal interactiva de node
-```js
-const message = 'Hola Mundo'
-console.log(message)
-// Hola Mundo
-```
-para correr un archivo en node nos ubicamos en la terminal y colocando `node "nombre del archivo"` ejecutara el archivo
-```console
-node app.js
-Hola Mundo
-``` 
-### Leer archivos - **FileSystem**
-```js
-const fs = requires('fs')
-const data = fs
-```
-
-* **`fs.readFileSync()`:** Sirve para leer el archivo
-* **`fs.writeFileSync()`:** Sirve para crear un nuevo archivo con la informacion de la variable
-* **`fs.mkdirSync(outputhPath, {recursive: true})`:** sirve para crear directorios, posee 2 argumentos, el primero es el directorio y el segundo son opciones para la creacion del directorio, recursivo, crea directorios intermedios si es true, modo, especifica permisos, `fs.mkdir()` es asincronico predeterminado, si deseas bloquear la ejecucion colocas el `sync`
-```ts
-fs.mkdir('./mi_proyecto/activos', { recursivo: verdadero, modo: 0o777 }, (err) => {
-// … manejo de errores
+const logSchema = new mongoose.Schema({
+    message: { type: String, required: true },
+    level: { type: String, enum: ['LOW', 'MEDIUM', 'HIGH'], default: 'LOW' },
+    createdAt: { type: Date, default: new Date() }
 });
-```
-* **`fs.existsSync()`:** Sirve para verificar si un archivo o carpeta existe en el sistema de archivos, devuelve un booleano
-* **`fs.rmSync()`:** Elimina archivos o directorios, con `recursive: true` permite borrar carpetas con archivos adentro, y con `force: true` evita que lance error si la carpeta/archivo no existe 
-* **`fs.appendFileSync`:** Agrega contenido al final del archivo 
-* **`fs`:** 
-* **`data.replace()`:** Sirve para reemplazar el las palabras del primer parametro por la del segundo parametro
 
-
-```js
-const fs = require('fs');
-const data = fs.readFileSync('../readme.md', 'utf-8');
-const newData = data.replace(/Node/ig, 'Pepe')
-fs.writeFileSync('readme-pepe.md', newData)
+export const LogModel = mongoose.model('Log', logSchema);
 ```
 
-### Factory Functions
-Son funciones que crean y retornan objetos, sirve para buenas practicas de programación como el patron adaptador, lo que nos permite usar dependencias de terceros y modificarlas sin necesidad de tocar el codigo principal
+### PostgreSQL + Prisma ORM
+Prisma es el estándar de la industria actual para bases de datos relacionales en el ecosistema Node/TypeScript.
 
-```js 
-const getAgePlugin = require('get-age')
+1. **Instalación:**
+```bash
+npm install prisma @types/node @types/pg --save-dev 
+npm install @prisma/client @prisma/adapter-pg pg dotenv
+```
 
-const getAge = (birthdate) => {
-    if (!birthdate) return new Error(`birthdate is required`)
-    return getAgePlugin(birthdate)
+2. **Inicializar:**
+```bash
+npx prisma init --db --output ../generated/prisma
+```
+
+3. **Esquema (`schema.prisma`):**
+```prisma
+generator client {
+  provider = "prisma-client"
 }
 
-module.exports = {
-    getAge,
+datasource db {
+  provider = "postgresql"
+  url      = env("POSTGRES_URL")
+}
+
+model User {
+  id    Int     @id @default(autoincrement())
+  email String  @unique
+  name  String?
 }
 ```
-> `getAge` lo usaremos en el codigo principal, cuando se necesite cambiar de dependencia, simplemente nos vamos al plugin y lo cambiamos, no necesitamos recorrer todo el codigo
 
-```js
-const makeBuildPerson = ({getAge, getId}) =>{
-    return ({name, birthdate}) =>{
-        return {
-            id: getId(),
-            name: name,
-            birthdate: birthdate,
-            age: getAge(birthdate),
+4. **Migraciones y Cliente:**
+```bash
+npx prisma migrate dev --name init
+npx prisma generate
+```
+
+5. **Uso (CRUD):**
+```typescript
+const newUser = await prisma.user.create({
+    data: { email: 'test@test.com', name: 'Samuel' }
+});
+
+const users = await prisma.user.findMany({ where: { name: 'Samuel' } });
+```
+
+> 💡 **Pro-Tip Profesional:** Siempre usa migraciones (`prisma migrate dev`) y evita cambiar la base de datos a mano. Si tienes problemas de resolución de módulos con Prisma, borra el `output` del `generator` en tu schema y deja el valor por defecto. Recuerda que usar `tsx` facilita enormemente el uso de Prisma con ESM.
+
+---
+
+## 5. Creación de Servidores y APIs REST
+
+### Express y Arquitectura Base
+Todo lo referente al framework web debe residir en la capa de `Presentation`.
+
+```typescript
+import express from 'express';
+
+const app = express();
+app.use(express.json()); // Middleware para procesar JSON
+app.use(express.urlencoded({ extended: true }));
+
+app.listen(3000, () => console.log('Server running on port 3000'));
+```
+
+### DTOs (Data Transfer Objects)
+Un DTO protege la aplicación validando cualquier información o carga útil (payload) que entre de manera limpia, evitando ensuciar los controladores.
+
+```typescript
+export class CreateTodoDto {
+    private constructor(public readonly text: string) { }
+
+    static create(props: { [key: string]: any }): [string?, CreateTodoDto?] {
+        const { text } = props;
+        if (!text) return ['El texto es requerido'];
+        return [undefined, new CreateTodoDto(text)];
+    }
+}
+```
+
+### Controladores y Rutas
+Separa la definición de rutas de la lógica de procesamiento (controlador).
+
+```typescript
+// Controlador
+export class TodosController {
+    public createTodo = async (req: Request, res: Response) => {
+        const [error, createTodoDto] = CreateTodoDto.create(req.body);
+        if (error) return res.status(400).json({ error });
+
+        // Lógica de negocio / Base de datos aquí
+        res.json({ msg: 'Creado con éxito', data: createTodoDto });
+    }
+}
+
+// Rutas
+const router = Router();
+const todoController = new TodosController();
+router.post('/', todoController.createTodo);
+```
+
+### Autenticación (Login / Register)
+* **Bcrypt:** Nunca guardes contraseñas en texto plano. Usa `bcrypt` para "hashearlas" de manera unidireccional.
+* **JWT (JSON Web Token):** Genera un token tras un login exitoso. Este token debe enviarse en cada petición futura (en los Headers `Authorization: Bearer <token>`) para identificar de forma segura al usuario.
+
+> 💡 **Pro-Tip Profesional:** En tu Controlador, NUNCA expongas la contraseña de vuelta al cliente, incluso si está encriptada. Cuando devuelvas el objeto del usuario en una respuesta HTTP, limpia el campo `password`. Además, maneja los errores de forma centralizada.
+
+---
+
+## 6. Clean Architecture y Domain-Driven Design (DDD)
+
+Para construir una API REST robusta e inmune a los cambios de librerías, se debe separar en capas estrictas:
+
+1. **Capa de Dominio (`/domain`)**: El corazón de la aplicación. Contiene reglas de negocio puras (sin librerías).
+   * **Entities**: La estructura real de los datos del sistema (`UserEntity`, `ProductEntity`).
+   * **Use Cases**: La acción concreta que un usuario o sistema quiere realizar (ej. `RegisterUser`, `SendNotification`).
+   * **Interfaces (Abstracts)**: Reglas sobre lo que debe hacer la capa exterior.
+2. **Capa de Infraestructura (`/infrastructure`)**:
+   * **DataSources**: Implementaciones concretas. Aquí usas Prisma, Mongoose, o fetch. Transforma los datos crudos a **Entities**.
+   * **Repositories**: Intermediario entre los Use Cases y el DataSource.
+3. **Capa de Presentación (`/presentation`)**:
+   * **Controllers y Routes**: Reciben peticiones HTTP, ejecutan el Use Case enviando la inyección de dependencias y despachan respuestas HTTP. No saben nada de bases de datos.
+
+> 💡 **Pro-Tip Profesional:** Las Entidades **no hablan** con los Casos de Uso, ni los Casos de Uso con los Controllers, ni los Controllers con interfaces externas. Las dependencias siempre fluyen **hacia adentro** (hacia el Dominio). Esto te permite cambiar de Express a Fastify, o de PostgreSQL a MySQL sin tocar ni una sola línea de lógica de negocio.
+
+---
+
+## 7. Monitoreo, Cron y Tareas de Background (NOC)
+
+Un NOC (Network Operations Center) monitorea servicios y mantiene la red operativa. En Node, podemos ejecutar código en background sin intervención directa mediante peticiones HTTP.
+
+### Tareas Programadas (Cron)
+Usa librerías como `cron` para ejecutar procesos, envíos de emails o validaciones periódicas.
+```typescript
+import { CronJob } from 'cron';
+
+const job = new CronJob('*/5 * * * * *', () => {
+    console.log('Esto se ejecuta cada 5 segundos');
+});
+job.start();
+```
+
+### Inyección de Dependencias en Casos de Uso
+En el caso de un monitor de red, puedes inyectar callbacks para definir qué hacer si el servicio responde o falla:
+
+```typescript
+class CheckService {
+    constructor(
+        private readonly successCallback: () => void,
+        private readonly errorCallback: (error: string) => void
+    ) {}
+
+    async execute(url: string) {
+        try {
+            await fetch(url);
+            this.successCallback();
+        } catch (error) {
+            this.errorCallback(`${error}`);
         }
-}}
-```
-La factory function nos permite enviar como argumentos las dependencias 
-
-
-### Argument Values - Argv
-
-#### Yargs
-
-```ts
-export const yarg = yargs(hideBin(process.argv))
-    .option('b', {
-        alias: 'base',
-        type: 'number',
-        demandOption: true,
-        describe: 'Multiplication table base'
-    })
-    .option('l', {
-        alias: 'limit',
-        type: 'number',
-        default: 10,
-        describe: 'Multiplication table limit'
-    })
-    .option('s', {
-        alias: 'show',
-        type: 'boolean',
-        default: false,
-        describe: 'Show multiplication table'
-    })
-    .check((argv, options) => {
-        if (argv.b < 1) {
-            throw 'Error: base must be a number'
-        }
-        return true;
-    })
-    .parseSync()
-```
-* **`.option()`:** permite establecer las opciones del argumento
-* **`parseSync/Async()`:** determina si se ejecutara de manera sincrona o asincrona
-* **`check(argv, options)`:** recibe 2 argumentos, el primero son los argv y el segundo son las opciones
-* **``:**
-
-#### Para enviar argumentos al process.argv
-```ts
-const runCommand = async (args: string[]) => {
-    // permite enviar los argumentos para agregarlos al process.argv
-    process.argv = [...process.argv, ...args]
-
-    const { yarg } = await import('./args.plugin')
-
-    return yarg
+    }
 }
 ```
 
-## Email
+> 💡 **Pro-Tip Profesional:** Para el registro de logs corporativos, implementa múltiples datasources (ej: guardar logs `LOW` en FileSystem, y enviar logs `HIGH` a PostgreSQL y notificar por Email). Abstrae estas conexiones detrás de un `LogRepository` para que tu tarea Cron se mantenga limpia.
 
-## Testing
+---
 
-### Pruebas Unitarias
-Enfocadas en pequeñas funcionalidades
-### Pruebas de Integracion
-Enfocada en como reaccionan varias piezas en conjunto
+## 8. Testing
 
-> Una prueba unitaria puede ejemplarse con una llanta, una prueba de integracion podria verse como tener 4 llantas y verificar que todo funcione 
+Las pruebas automatizadas garantizan la estabilidad de tu código y te evitan miedo al refactorizar.
 
-### Caracteristicas de las Pruebas
-Tienen que ser: 
-* Faciles de escribir
-* Faciles de Leer
-* Confiables
-* Rapidas
-* Principalmente Unitarias
+### Terminología AAA
+* **Arrange (Preparar):** Inicializar variables e importaciones del entorno inicial.
+* **Act (Actuar):** Ejecutar la función o método a testear.
+* **Assert (Afirmar):** Evaluar que el resultado obtenido es el esperado mediante `expect()`.
 
-### Terminlogia AAA, Arrange (arreglar), Act (Actuar), Assert (afirmar)
+### Configuración con Jest
+1. **Instalación:**
+```bash
+npm install -D jest @types/jest ts-jest supertest
+```
+2. **Inicializar:**
+```bash
+npx ts-jest config:init
+```
+3. **Scripts (`package.json`):**
+```json
+"test": "jest",
+"test:watch": "jest --watch",
+"test:coverage": "jest --coverage"
+```
 
-#### Arrange / Preparacion del Estado Inicial
-* Inicializamos Variables
-* Importaciones Necesarias
-#### Act / Aplicamos acciones o estimulos
-* Llamar Metodos
-* Simular Clicks
-* Realizar acciones sobre el paso anterior
-#### Assert / Observar Comportamiento Resultante
-* Resultados esperados ( que algo cambie, incremente o que no suceda nada)
-* Se evalua el resultado del Act
+### Ejemplo de Prueba Unitaria
+```typescript
+import { describe, expect, test } from '@jest/globals';
 
-### Tipos de testing
-
-* **`expect(value).toBe(value2)`**
-* **`expect(value).toEqual(value2)`** 
-* **`expect(value).toBeGreaterThan(value2)`** 
-* **`expect(value).toBeLessThan(value2)`** 
-* **`expect(value).toBeGreaterThanOrEqual(value2)`** 
-* **`expect(value).toBeLessThanOrEqual(value2)`** 
-* **`expect(value).toBeCloseTo(value2)`** 
-* **`expect(value).toBeDefined()`** 
-* **`expect(value).toBeUndefined()`** 
-* **`expect(value).toBeNull()`** 
-* **`expect(value).toBeTruthy()`** 
-* **`expect(value).toBeFalsy()`** 
-* **`expect(value).toBeNaN()`** 
-* **`expect(value).toBeInstanceOf(value2)`** 
-* **`expect(value).toBeCloseTo(value2)`** 
-* **`expect(value).toThrow(value2)`** 
-* **`expect(value).toThrowError(value2)`** 
-* **`expect(value).toStrictEqual(value2)`** 
-
-
-```ts
-// con JEST
-import {describe, expect, test} from '@jest/globals';
-
-
-describe('Test in the App File', () =>{
-
-    test('should be 30', () =>{
-
+describe('Calculadora', () => {
+    test('debe sumar 10 y 20 y retornar 30', () => {
         // 1. Arrange
         const num1 = 10;
         const num2 = 20;
-
         // 2. Act
         const result = num1 + num2;
-
         // 3. Assert
         expect(result).toBe(30);
-    })
-})
-```
-
-#### Metodo Done()
-Se usa cuando tenemos codigo no bloqueante y necesitamos esperar a que se termine de ejecutar
-```ts
-    test('getUserById should return an error if user does not exist', (done)=>{
-        const id = 10;
-
-        getUserById(id, (err, user) =>{
-            
-            expect(err).toBe(`Usuario ${id} no existe`)
-            expect(user).toBeUndefined()
-
-            done();
-        })
-    })
-```
-### SpyOn
-El spyOn en Jest es una función que te permite espiar (spy) métodos de objetos para rastrear cómo son llamados y, opcionalmente, modificar su comportamiento durante las pruebas.
-
-* **¿Qué hace spyOn?**
-
-    `spyOn` crea un "espía" en un método específico de un objeto, permitiéndote:
-
-    * Rastrear llamadas: Verificar si el método fue llamado, cuántas veces, y con qué argumentos
-    * Modificar comportamiento: Cambiar la implementación del método temporalmente
-    * Mockear valores de retorno: Definir qué debe retornar el método sin ejecutar su código original
-
-#### Metodos mas comunes
-* `mockReturnValue(value)` - Define un valor de retorno
-* `mockReturnValueOnce(value)` - Define un valor de retorno solo para la primera llamada
-* `mockImplementation(fn)` - Reemplaza la implementación del método
-* `mockResolvedValue(value)` - Para promesas que se resuelven
-* `mockRejectedValue(error)` - Para promesas que se rechazan
-* `mockRestore()` - Restaura la implementación original
-* ` const createMock = jest.fn();` - Similar a los spy pero mas simple
-**Trabajando con Jest.fn()**
-```ts
-        const logMock = jest.fn();
-        const createMock = jest.fn() as ({ base, limit }: CreateTableOptions) => string;
-        const saveFileMock = jest.fn() as ({ fileContent, destination, fileName }: SaveFileOptions) => boolean;
-
-        global.console.log = logMock;
-        CreateTable.prototype.execute = createMock;
-        SaveFile.prototype.execute = saveFileMock;
-```
-#### SpyOn - Metodo de Objetos (Verificar que fue llamado)
-
-```ts
-test('getAge should return 0 years', () =>{
-        const spy = jest.spyOn(Date.prototype, 'getFullYear').mockReturnValue(1995);
-
-        const birthdate = '1995-10-21';
-        const age = getAge(birthdate);
-
-        expect(age).toBe(0);
-        expect(spy).toHaveBeenCalled();
-    })
-```
-#### SpyOn - Mockear el valor de retorno
-```ts
-test('mockea el valor de retorno', () => {
-  const spy = jest.spyOn(miObjeto, 'saludar')
-    .mockReturnValue('Hola Mockeado');
-    
-  const resultado = miObjeto.saludar('Samuel');
-  
-  expect(resultado).toBe('Hola Mockeado'); // No ejecuta la función original
-});
-```
-
-#### Spyon - winston 
-```js
-describe('plugins/logger.plugin.ts', () => {
-    test('buildLogger sohuld return a function logger', () => {
-        const logger = buildLogger('test')
-        expect(typeof logger.log).toBe('function');
-        expect(typeof logger.error).toBe('function');
     });
-
-    test('logger.log shoud log a message', () => {
-
-        const winstonLoggerMock = jest.spyOn(winstonLogger, 'log')
-
-        const message = 'test message';
-        const service = 'test service';
-
-        const logger = buildLogger(service);
-        logger.log(message);
-
-        expect(winstonLoggerMock).toHaveBeenCalledWith(F
-            'info',
-            expect.objectContaining({
-                 level: 'info',
-                message,
-                service,
-            })
-        );
-
-```
-
-## Bases de Datos
-
-### MongoDB
-
-Para iniciar mongo en docker se debe usar el comando `docker compose up -d` para mas informacion buscar la seccion de Inicializaciones
-
-### Mongoose: Mongo y Node | OBJECT MODELING FOR NODE.JS
-
-#### Inicializando
-
-Instalacion `npm install mongoose`
-
-> conectarse a mongodb con mongoose
-
-```ts
-    await mongoose.connect( URL, OPTIONS: {
-        dbName: dbName,
-    })
-```
-
-#### Schemas & Models 
- Un Schema es la plantilla, y un Model es el "constructor" que usa esa plantilla para crear y manipular registros en la DB, permitiendo operaciones como buscar, guardar, actualizar y borrar. 
-```ts
-const logSchema = new mongoose.Schema({
-
-    message: {
-        type: String,
-        required: true,
-
-    },
-    origin: {
-        type: String,
-    },
-    level: {
-        type: String,
-        required: true,
-        enum: ['low', 'medium', 'high'],
-        default: 'low'
-    },
-    createdAt: {
-        type: Date,
-        default: new Date(),
-    }
-})
-export const logModel = mongoose.model('Log', logSchema);
-```
-> tratamos que el schema se asemeje a la entidad de regla de negocio 
-
-#### Crear y Leer en Mongo
-
-Para crear utilizamos el `model.create({options})` 
-```ts
-    const newLog = await logModel.create({
-        message: 'Test message from mongo',
-        origin: 'app.ts',
-        level: "low",
-    })
-```
-Y para guardar usamos el `.save()`
-```ts
-    await newLog.save()
-```
-
-con el `find()` nos devuelve el objeto de todo lo que hemos guardado en la base de datos
-```ts
-    const logs = await logModel.find()  
-```
-
-Si queremos regresar un dato, necesitamos utilizar el `?` ya que hay chance de que nos devuelva un undefined, con el `?` le decimos a ts que busque un dato y si no lo encuentra que devuelva undefined
-```ts
-    console.log(logs[7]?.message)
-```
-
-#### MongoLogDataSource 
-
-Se crea la clase que implementa el LogDataSource
-```ts
-export class MongoLogDataSource implements LogDataSource {
-
-}
-```
-el `saveLog()` funciona para guardar el log, solo recibiendo un LogEntity ya establecido en las reglas de negocio
-
-```ts
-export class MongoLogDataSource implements LogDataSource {
-    async saveLog(log: LogEntity): Promise<void> {
-        const newLog = await logModel.create(log)
-        console.log('Mongo Log created:', newLog)
-    }
-}
-```
-
-en el `getLogs()` buscamos por el `severityLevel` y pasamos todo el arreglo de datos obtenido de mongo por un `.map()` con el metodo `.fromObject()` para filtrarlo y convertirlo en tipo `Promise<LogEntity[]>`
-```ts
-export class MongoLogDataSource implements LogDataSource {
-    async getLogs(severityLevel: LogSeverityLevel): Promise<LogEntity[]> {
-        const logs = await logModel.find({
-            level: severityLevel
-        })
-
-        return logs.map((log) => {
-            return LogEntity.fromObject(log)
-        })
-    }
-}
-```
-
-### PostgreSQL
-
-### Prisma - ORM 
-
-
-## Paquetes de Terceros utiles
-> `npm i` para instalar las dependencias de tercero que falten (estan en el package.json)
-* **uuid:** generador de id's unicas
-* **axios:** facilita el uso de peticiones http y fetch
-```js
-async(url) =>{
-    const {data} = await axios.get(url)
-    return data
-}
-```
-* **winston:** sirve para generar logs y guardarlos en un archivo 
-```js
-const winston = require('winston');
-
-const logger = winston.createLogger({
-  level: 'info',
-  format: winston.format.json(),
-//   defaultMeta: { service: 'user-service' },
-  transports: [
-    new winston.transports.File({ filename: 'error.log', level: 'error' }),
-    new winston.transports.File({ filename: 'combined.log' }),
-  ],
 });
-logger.add(new winston.transports.Console({
-    format: winston.format.simple(),
-  }));
-module.exports = function buildLogger(service) {
-    return {
-        log: (message) =>{
-            logger.log('info', {message, service})
-        }
-    }
-}
-const logger = buildLogger('app.js');
-logger.log('Hola Mundo')
 ```
-* **yargs:** Sirve para procesar Arguments Values
-```js
-const argv = yargs.argv;
-```
-* **get-age:** Calcula la edad a partir de la fecha de nacimiento.
-```js
-const age = getAge('1990-01-01');
-```
-* **fs-extra:** Métodos de sistema de archivos extendidos con soporte para promesas.
-```js
-const fs = require('fs-extra');
-```
-* **cron:** Herramienta para programar tareas (Cron jobs).
-```js
-const cron = require('cron');
-```
-* **dotenv:** Carga variables de entorno desde un archivo .env.
-```js
-const dotenv = require('dotenv');
-```
-* **env-var:** Gestión y validación de variables de entorno.
-```js
-const envVar = require('env-var');
-```
-* **nodemailer:** Envío de correos electrónicos.
-```js
-const nodemailer = require('nodemailer');
-```
-* **json-server:** API REST falsa completa para prototipado rápido.
-```js
-const jsonServer = require('json-server');
-```
-* **:**
-### Testing Libraries 
-* **Jest:** Creado por Meta, diseñado para hacer que las pruebas de código sean sencillas, rápidas y fiables.
-* **Mocha:** Creado por Douglas Crockford, es un framework de pruebas para JavaScript.
-* **Jasmine:** creado por Google, es un framework de pruebas para JavaScript.
 
+### Uso de SpyOn y Mocks
+`spyOn` se usa para rastrear llamadas a dependencias de terceros sin ejecutar su código original. Ideal para no bombardear APIs o DBs de producción.
+```typescript
+test('debe simular retorno del año', () => {
+  const spy = jest.spyOn(Date.prototype, 'getFullYear').mockReturnValue(1995);
+  const resultado = obtenerAnio();
+  expect(resultado).toBe(1995); 
+  expect(spy).toHaveBeenCalled();
+});
+```
+
+> 💡 **Pro-Tip Profesional:** Evita hacer peticiones reales a bases de datos en tus tests unitarios. Utiliza Mocks o una base de datos de test en memoria (Docker o SQLite) para realizar pruebas de integración (como con `supertest`) puras, aisladas e idempotentes.
+
+---
+
+## 9. Docker y Despliegue
+
+Docker empaqueta aplicaciones en contenedores estandarizados para que se ejecuten idénticamente en cualquier entorno (desarrollo, testing, producción).
+
+### Levantando Bases de Datos con Docker Compose
+Crea un `docker-compose.yml` en la raíz de tu proyecto para evitar instalar bases de datos nativamente en tu sistema operativo, manteniéndolo limpio.
+
+```yml
+version: '3.8'
+services:
+  postgres-db:
+    image: postgres:latest
+    restart: always # Se reiniciará siempre que inicie Docker
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      POSTGRES_DB: ${POSTGRES_DB}
+    volumes:
+      - ./postgres:/var/lib/postgresql/data
+    ports:
+      - 5432:5432  
+```
+
+**Comandos vitales:**
+* `docker compose up -d`: Levantar servicios en segundo plano.
+* `docker compose down -v`: Detener contenedores y eliminar volúmenes.
+* `docker ps -a`: Listar contenedores activos y detenidos.
+* `docker exec -it <container_id> /bin/bash`: Entrar a la terminal interactiva del contenedor.
+
+> 💡 **Pro-Tip Profesional:** ¡No subas la carpeta `/postgres` (volumen mapeado en tu PC local) a GitHub! Asegúrate de que los directorios mapeados en los volúmenes, así como el archivo `.env`, estén obligatoriamente en tu `.gitignore`.
+
+---
+
+## 10. Paquetes de Terceros Útiles
+
+Una lista de las dependencias recurrentes más útiles e imprescindibles en el ecosistema actual de Node.js:
+
+- **`uuid`:** Generador de IDs únicas y seguras universalmente.
+- **`axios` / `node-fetch`:** Cliente HTTP versátil para consumir APIs externas.
+- **`winston`:** Logger profesional (guarda logs en consola, archivos, o transportes en la nube).
+- **`yargs`:** Procesamiento robusto de argumentos enviados a través de consola (`process.argv`).
+- **`cron`:** Programador asíncrono de tareas en background.
+- **`dotenv` / `env-var`:** Carga segura y validación estricta de variables de entorno `.env`.
+- **`nodemailer`:** Estándar para configuración SMTP y envío de correos electrónicos.
+- **`json-server`:** API REST mockeada instantánea (útil para prototipado rápido en equipos full-stack).
+- **`supertest`:** Librería estándar de la industria para probar controladores y rutas de Express asertivamente junto con Jest.
+- **`rimraf`:** Borrado de directorios (equivalente a `rm -rf`) que funciona igual de bien en Windows, Linux y Mac.
+
+---
+*Este proyecto y guía de referencia forman parte de una exhaustiva formación profesional en backend moderno. Desarrollado con ❤️ y mucho código.*
