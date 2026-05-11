@@ -7,7 +7,7 @@ npm i -D typescript @types/node tsx rimraf
 ```
 2. Inicializar el archivo de configuración de TypeScript ( Se puede configurar al gusto)
 ```
-npx tsc --init --outDir dist/ --rootDir src --module ESNext --moduleResolution Bundler --target ES2023 
+npx tsc --init --outDir dist/ --rootDir src --module ESNext --moduleResolution Bundler --target ES2023
 
 ```
 
